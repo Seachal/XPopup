@@ -64,9 +64,13 @@
 
 首先需要添加Gradle依赖：
 ```groovy
-implementation 'com.lxj:xpopup:1.8.10'
+implementation 'com.lxj:xpopup:1.8.17' //就是androidx版本
+//从1.8.12开始，包变为androidx版本，且只提供androidx版本。
+//从1.8.12开始，包变为androidx版本，且只提供androidx版本。
+//从1.8.12开始，包变为androidx版本，且只提供androidx版本。
+
 //for androidx.
-implementation 'com.lxj:xpopup:1.8.10-x'
+implementation 'com.lxj:xpopup:1.8.10-x'  //从1.8.12开始，没有-x版本了
 ```
 
 必须添加的依赖库：
@@ -124,7 +128,11 @@ implementation 'com.android.support:design:28.0.0'
 - 采蘑菇（https://a.app.qq.com/o/simple.jsp?pkgname=com.lx.cmg）
 - 蜂鸟屋APP，蜂鸟屋SAAS 平板
 - 茶臻选（https://android.myapp.com/myapp/detail.htm?apkName=com.aiso.tea&ADTAG=mobile）
-
+- 风扇屏客户端app
+- EdifierConnect 漫步者耳机产品APP
+- 斑猪(广州汇数创联科技有限公司)
+- 夜探(成都波斯猫)
+- 极光影院(个人开发者，可到公众号极光终点站下载)
 
 
 ## 打个赏

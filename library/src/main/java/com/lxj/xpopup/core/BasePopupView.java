@@ -5,6 +5,10 @@ import android.content.Context;
 import android.graphics.Rect;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,6 +38,7 @@ import com.lxj.xpopup.util.XPopupUtils;
 import com.lxj.xpopup.util.navbar.NavigationBarObserver;
 import com.lxj.xpopup.util.navbar.OnNavigationBarListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import static com.lxj.xpopup.enums.PopupAnimation.NoAnimation;
 
@@ -378,7 +383,8 @@ public abstract class BasePopupView extends FrameLayout implements OnNavigationB
      */
     protected void onCreate() {
     }
-
+    protected void applyDarkTheme() {
+    }
     /**
      * 执行显示动画：动画由2部分组成，一个是背景渐变动画，一个是Content的动画；
      * 背景动画由父类实现，Content由子类实现
@@ -466,7 +472,7 @@ public abstract class BasePopupView extends FrameLayout implements OnNavigationB
      * 消失
      */
     public void dismiss() {
-        if (popupStatus == PopupStatus.Dismissing) return;
+        if (popupStatus == PopupStatus.Dismissing || popupStatus == PopupStatus.Dismiss) return;
         popupStatus = PopupStatus.Dismissing;
         if (popupInfo.autoOpenSoftInput) KeyboardUtils.hideSoftInput(this);
         clearFocus();
@@ -516,8 +522,10 @@ public abstract class BasePopupView extends FrameLayout implements OnNavigationB
                 } else {
                     // 让根布局拿焦点，避免布局内RecyclerView类似布局获取焦点导致布局滚动
                     View needFocusView = ((Activity) getContext()).findViewById(android.R.id.content);
-                    needFocusView.setFocusable(true);
-                    needFocusView.setFocusableInTouchMode(true);
+                    if(needFocusView!=null){
+                        needFocusView.setFocusable(true);
+                        needFocusView.setFocusableInTouchMode(true);
+                    }
                 }
             }
 
@@ -556,6 +564,27 @@ public abstract class BasePopupView extends FrameLayout implements OnNavigationB
      * 消失动画执行完毕后执行
      */
     protected void onDismiss() {
+        //在弹窗内嵌入Fragment的场景中，当弹窗消失后，由于Fragment被Activity的FragmentManager缓存，
+        //会导致弹窗重新创建的时候，Fragment会命中缓存，生命周期不再执行。为了处理这种情况，只需重写：
+        // getInternalFragmentNames() 方法，返回嵌入的Fragment名称，XPopup会自动移除Fragment。
+        if(getContext() instanceof FragmentActivity){
+            FragmentManager manager = ((FragmentActivity) getContext()).getSupportFragmentManager();
+            List<Fragment> fragments = manager.getFragments();
+            if(fragments!=null && fragments.size()>0 && getInternalFragmentNames()!=null){
+                for (int i = 0; i < fragments.size(); i++) {
+                    String name = fragments.get(i).getClass().getSimpleName();
+                    if(getInternalFragmentNames().contains(name)){
+                        manager.beginTransaction()
+                                .remove(fragments.get(i))
+                                .commitAllowingStateLoss();
+                    }
+                }
+            }
+        }
+    }
+
+    protected List<String> getInternalFragmentNames(){
+        return null;
     }
 
     /**

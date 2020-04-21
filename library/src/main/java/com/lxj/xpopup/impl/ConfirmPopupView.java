@@ -2,8 +2,11 @@ package com.lxj.xpopup.impl;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lxj.xpopup.R;
@@ -20,7 +23,7 @@ public class ConfirmPopupView extends CenterPopupView implements View.OnClickLis
     OnCancelListener cancelListener;
     OnConfirmListener confirmListener;
     TextView tv_title, tv_content, tv_cancel, tv_confirm;
-    String title, content, hint, cancelText, confirmText;
+    CharSequence title, content, hint, cancelText, confirmText;
     boolean isHideCancel = false;
 
     public ConfirmPopupView(@NonNull Context context) {
@@ -58,7 +61,7 @@ public class ConfirmPopupView extends CenterPopupView implements View.OnClickLis
         if (!TextUtils.isEmpty(title)) {
             tv_title.setText(title);
         } else {
-            tv_title.setVisibility(GONE);
+            tv_title.setVisibility(INVISIBLE);
         }
 
         if (!TextUtils.isEmpty(content)) {
@@ -73,11 +76,28 @@ public class ConfirmPopupView extends CenterPopupView implements View.OnClickLis
             tv_confirm.setText(confirmText);
         }
         if (isHideCancel) tv_cancel.setVisibility(GONE);
+        if(bindItemLayoutId==0 && popupInfo.isDarkTheme){
+            applyDarkTheme();
+        }
     }
 
     protected void applyPrimaryColor() {
-        tv_cancel.setTextColor(XPopup.getPrimaryColor());
-        tv_confirm.setTextColor(XPopup.getPrimaryColor());
+//        tv_cancel.setTextColor(XPopup.getPrimaryColor());
+        if(bindItemLayoutId==0){
+            tv_confirm.setTextColor(XPopup.getPrimaryColor());
+        }
+    }
+
+    @Override
+    protected void applyDarkTheme() {
+        super.applyDarkTheme();
+        tv_title.setTextColor(getResources().getColor(R.color._xpopup_white_color));
+        tv_content.setTextColor(getResources().getColor(R.color._xpopup_white_color));
+        tv_cancel.setTextColor(getResources().getColor(R.color._xpopup_white_color));
+        tv_confirm.setTextColor(getResources().getColor(R.color._xpopup_white_color));
+        findViewById(R.id.xpopup_divider).setBackgroundColor(getResources().getColor(R.color._xpopup_dark_color));
+        findViewById(R.id.xpopup_divider_h).setBackgroundColor(getResources().getColor(R.color._xpopup_dark_color));
+        ((ViewGroup)tv_title.getParent()).setBackgroundResource(R.drawable._xpopup_round3_dark_bg);
     }
 
     public ConfirmPopupView setListener(OnConfirmListener confirmListener, OnCancelListener cancelListener) {
@@ -86,19 +106,19 @@ public class ConfirmPopupView extends CenterPopupView implements View.OnClickLis
         return this;
     }
 
-    public ConfirmPopupView setTitleContent(String title, String content, String hint) {
+    public ConfirmPopupView setTitleContent(CharSequence title, CharSequence content, CharSequence hint) {
         this.title = title;
         this.content = content;
         this.hint = hint;
         return this;
     }
 
-    public ConfirmPopupView setCancelText(String cancelText) {
+    public ConfirmPopupView setCancelText(CharSequence cancelText) {
         this.cancelText = cancelText;
         return this;
     }
 
-    public ConfirmPopupView setConfirmText(String confirmText) {
+    public ConfirmPopupView setConfirmText(CharSequence confirmText) {
         this.confirmText = confirmText;
         return this;
     }

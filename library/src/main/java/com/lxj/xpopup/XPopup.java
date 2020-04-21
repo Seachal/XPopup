@@ -43,7 +43,7 @@ public class XPopup {
      * 全局弹窗的设置
      **/
     private static int primaryColor = Color.parseColor("#121212");
-    private static int animationDuration = 360;
+    private static int animationDuration = 300;
     public static int statusBarShadowColor = Color.parseColor("#55000000");
     private static int shadowBgColor = Color.parseColor("#9F000000");
 
@@ -322,6 +322,17 @@ public class XPopup {
         }
 
         /**
+         * 是否让使用暗色主题，默认是false。
+         *
+         * @param isDarkTheme
+         * @return
+         */
+        public Builder isDarkTheme(boolean isDarkTheme) {
+            this.popupInfo.isDarkTheme = isDarkTheme;
+            return this;
+        }
+
+        /**
          * 是否点击弹窗背景时将点击事件透传到Activity下，默认是不透传，目前会引发很多不可控的问题，暂时关闭。
          *
          * @param isClickThrough
@@ -356,7 +367,7 @@ public class XPopup {
          * @param isHideCancel    是否隐藏取消按钮
          * @return
          */
-        public ConfirmPopupView asConfirm(String title, String content, String cancelBtnText, String confirmBtnText, OnConfirmListener confirmListener, OnCancelListener cancelListener, boolean isHideCancel) {
+        public ConfirmPopupView asConfirm(CharSequence title, CharSequence content, CharSequence cancelBtnText, CharSequence confirmBtnText, OnConfirmListener confirmListener, OnCancelListener cancelListener, boolean isHideCancel) {
             popupType(PopupType.Center);
             ConfirmPopupView popupView = new ConfirmPopupView(this.context);
             popupView.setTitleContent(title, content, null);
@@ -368,11 +379,11 @@ public class XPopup {
             return popupView;
         }
 
-        public ConfirmPopupView asConfirm(String title, String content, OnConfirmListener confirmListener, OnCancelListener cancelListener) {
+        public ConfirmPopupView asConfirm(CharSequence title, CharSequence content, OnConfirmListener confirmListener, OnCancelListener cancelListener) {
             return asConfirm(title, content, null, null, confirmListener, cancelListener, false);
         }
 
-        public ConfirmPopupView asConfirm(String title, String content, OnConfirmListener confirmListener) {
+        public ConfirmPopupView asConfirm(CharSequence title, CharSequence content, OnConfirmListener confirmListener) {
             return asConfirm(title, content, null, null, confirmListener, null, false);
         }
 
@@ -387,7 +398,7 @@ public class XPopup {
          * @param cancelListener  点击取消的监听器
          * @return
          */
-        public InputConfirmPopupView asInputConfirm(String title, String content, String inputContent, String hint, OnInputConfirmListener confirmListener, OnCancelListener cancelListener) {
+        public InputConfirmPopupView asInputConfirm(CharSequence title, CharSequence content, CharSequence inputContent, CharSequence hint, OnInputConfirmListener confirmListener, OnCancelListener cancelListener) {
             popupType(PopupType.Center);
             InputConfirmPopupView popupView = new InputConfirmPopupView(this.context);
             popupView.setTitleContent(title, content, hint);
@@ -397,15 +408,15 @@ public class XPopup {
             return popupView;
         }
 
-        public InputConfirmPopupView asInputConfirm(String title, String content, String inputContent, String hint, OnInputConfirmListener confirmListener) {
+        public InputConfirmPopupView asInputConfirm(CharSequence title, CharSequence content, CharSequence inputContent, CharSequence hint, OnInputConfirmListener confirmListener) {
             return asInputConfirm(title, content, inputContent, hint, confirmListener, null);
         }
 
-        public InputConfirmPopupView asInputConfirm(String title, String content, String hint, OnInputConfirmListener confirmListener) {
+        public InputConfirmPopupView asInputConfirm(CharSequence title, CharSequence content, CharSequence hint, OnInputConfirmListener confirmListener) {
             return asInputConfirm(title, content, null, hint, confirmListener, null);
         }
 
-        public InputConfirmPopupView asInputConfirm(String title, String content, OnInputConfirmListener confirmListener) {
+        public InputConfirmPopupView asInputConfirm(CharSequence title, CharSequence content, OnInputConfirmListener confirmListener) {
             return asInputConfirm(title, content, null, null, confirmListener, null);
         }
 
@@ -418,7 +429,7 @@ public class XPopup {
          * @param selectListener 选中条目的监听器
          * @return
          */
-        public CenterListPopupView asCenterList(String title, String[] data, int[] iconIds, int checkedPosition, OnSelectListener selectListener) {
+        public CenterListPopupView asCenterList(CharSequence title, String[] data, int[] iconIds, int checkedPosition, OnSelectListener selectListener) {
             popupType(PopupType.Center);
             CenterListPopupView popupView = new CenterListPopupView(this.context)
                     .setStringData(title, data, iconIds)
@@ -428,11 +439,11 @@ public class XPopup {
             return popupView;
         }
 
-        public CenterListPopupView asCenterList(String title, String[] data, OnSelectListener selectListener) {
+        public CenterListPopupView asCenterList(CharSequence title, String[] data, OnSelectListener selectListener) {
             return asCenterList(title, data, null, -1, selectListener);
         }
 
-        public CenterListPopupView asCenterList(String title, String[] data, int[] iconIds, OnSelectListener selectListener) {
+        public CenterListPopupView asCenterList(CharSequence title, String[] data, int[] iconIds, OnSelectListener selectListener) {
             return asCenterList(title, data, iconIds, -1, selectListener);
         }
 
@@ -441,7 +452,7 @@ public class XPopup {
          *
          * @return
          */
-        public LoadingPopupView asLoading(String title) {
+        public LoadingPopupView asLoading(CharSequence title) {
             popupType(PopupType.Center);
             LoadingPopupView popupView = new LoadingPopupView(this.context)
                     .setTitle(title);
@@ -463,7 +474,7 @@ public class XPopup {
          * @param selectListener  选中条目的监听器
          * @return
          */
-        public BottomListPopupView asBottomList(String title, String[] data, int[] iconIds, int checkedPosition, boolean enableDrag, OnSelectListener selectListener) {
+        public BottomListPopupView asBottomList(CharSequence title, String[] data, int[] iconIds, int checkedPosition, boolean enableDrag, OnSelectListener selectListener) {
             popupType(PopupType.Bottom);
             BottomListPopupView popupView = new BottomListPopupView(this.context)
                     .setStringData(title, data, iconIds)
@@ -473,19 +484,19 @@ public class XPopup {
             return popupView;
         }
 
-        public BottomListPopupView asBottomList(String title, String[] data, OnSelectListener selectListener) {
+        public BottomListPopupView asBottomList(CharSequence title, String[] data, OnSelectListener selectListener) {
             return asBottomList(title, data, null, -1, true, selectListener);
         }
 
-        public BottomListPopupView asBottomList(String title, String[] data, int[] iconIds, OnSelectListener selectListener) {
+        public BottomListPopupView asBottomList(CharSequence title, String[] data, int[] iconIds, OnSelectListener selectListener) {
             return asBottomList(title, data, iconIds, -1, true, selectListener);
         }
 
-        public BottomListPopupView asBottomList(String title, String[] data, int[] iconIds, int checkedPosition, OnSelectListener selectListener) {
+        public BottomListPopupView asBottomList(CharSequence title, String[] data, int[] iconIds, int checkedPosition, OnSelectListener selectListener) {
             return asBottomList(title, data, iconIds, checkedPosition, true, selectListener);
         }
 
-        public BottomListPopupView asBottomList(String title, String[] data, int[] iconIds, boolean enableDrag, OnSelectListener selectListener) {
+        public BottomListPopupView asBottomList(CharSequence title, String[] data, int[] iconIds, boolean enableDrag, OnSelectListener selectListener) {
             return asBottomList(title, data, iconIds, -1, enableDrag, selectListener);
         }
 
